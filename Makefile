@@ -6,7 +6,7 @@ CFLAGS = -Wall -Wextra -Werror
 UNAME_S := $(shell uname -s)
 
 # Source files
-SRCS = mlx_test.c 
+SRCS =  main.c
 
 OBJS = $(SRCS:.c=.o)
 
