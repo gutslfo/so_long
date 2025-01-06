@@ -6,10 +6,11 @@
 /*   By: pitran <pitran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:24:30 by pitran            #+#    #+#             */
-/*   Updated: 2024/12/18 17:33:18 by pitran           ###   ########.fr       */
+/*   Updated: 2024/12/28 16:43:40 by pitran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "solong.h"
 
 char    *ft_strchr(const char s, int c)
 {

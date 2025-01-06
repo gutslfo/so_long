@@ -6,7 +6,7 @@
 /*   By: pitran <pitran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 16:22:42 by pitran            #+#    #+#             */
-/*   Updated: 2024/12/24 12:24:39 by pitran           ###   ########.fr       */
+/*   Updated: 2024/12/28 16:47:35 by pitran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void    draw_wall(int x, int y, t_data *data)
 	mlx_put_image_to_window(data->mlx, data->win, data->wall_image, x * IMG_WIDTH, y * IMG_HEIGHT);
 }
 
-void	draw_path(int x, int y, _data *data)
+void	draw_path(int x, int y, t_data *data)
 {
 	mlx_put_image_to_window(data->mlx, data->win, data->path_image, x * IMG_WIDTH, y * IMG_HEIGHT);
 }

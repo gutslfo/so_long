@@ -6,22 +6,22 @@
 /*   By: pitran <pitran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:24:42 by pitran            #+#    #+#             */
-/*   Updated: 2024/12/23 16:40:35 by pitran           ###   ########.fr       */
+/*   Updated: 2024/12/29 23:49:10 by pitran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
+#include "solong.h"
 
 int	line_count(char	*filename)
 {
 	int	fd;
 	int	line_count;
+	int	empty_line;
 	char *line;
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		return (0);
+		return(perror("Error openeing file (fd negative)"), 0);
 
 	line_count = 0;
 	empty_line = 0;
@@ -35,7 +35,7 @@ int	line_count(char	*filename)
 	}
 	close (fd);
 	if (empty_line)
-		return(0);
+		return(perror("Empty line in map:"), 0);
 	return(line_count);
 }
 
@@ -48,13 +48,13 @@ t_map*	parse_map(char	*filename)
 
 	map = malloc(sizeof(t_map));
 	if (!map)
-		return(NULL);
+		return(perror("Map allocation error"), NULL);
 	
 	map->height = line_count(filename);
 	if (map->height < 3)
 	{
 		free(map);
-		return(NULL);
+		return(printf("Map must have minimum 4 lines"), NULL);
 	}
 	map->grid = malloc(sizeof(char *) * (map->height + 1));
 	if (!map->grid)

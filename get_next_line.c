@@ -6,9 +6,11 @@
 /*   By: pitran <pitran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:24:50 by pitran            #+#    #+#             */
-/*   Updated: 2024/12/18 18:54:07 by pitran           ###   ########.fr       */
+/*   Updated: 2024/12/28 16:43:55 by pitran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "solong.h"
 
 static char    *set_line(char *buffer)
 {
