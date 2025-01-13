@@ -5,110 +5,95 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pitran <pitran@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 17:24:30 by pitran            #+#    #+#             */
-/*   Updated: 2024/12/28 16:43:40 by pitran           ###   ########.fr       */
+/*   Created: 2024/11/18 12:43:40 by pitran            #+#    #+#             */
+/*   Updated: 2025/01/13 15:29:10 by pitran           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "solong.h"
+#include "get_next_line.h"
 
-char    *ft_strchr(const char s, int c)
+char	*ft_strchr(const char *s, int c)
 {
-    while((s))
-    {
-        if (*s == (char)c)
-            return ((char *)s);
-        s++;
-    }
-    if (c == '\0')
-        return ((char *)s);
-    return (NULL);
+	while (*(s))
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if (c == '\0')
+		return ((char *)s);
+	return (NULL);
 }
 
-void    *ft_memset(void *s, int c, size_t n)
+size_t	ft_strlen(char *str)
 {
-    unsigned char   *ptr;
-    size_t          i;
+	size_t	i;
 
-    ptr = (unsigned char *)s;
-    i = 0;
-    while (i < n)
-    {
-        ptr[i] = (unsigned char)c;
-        i++;
-    }
-    return (s);
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+		i++;
+	return (i);
 }
 
-size_t  ft_strlen(char *str)
+char	*ft_strdup(char *s)
 {
-    size_t  i;
-    i = 0;
+	size_t	i;
+	size_t	j;
+	size_t	size;
+	char	*dup;
 
-    if(!str)
-        return(0);
-    while(str[i])
-        i++;
-    return i;
+	if (!s)
+		return (NULL);
+	size = ft_strlen(s);
+	dup = (char *)malloc(sizeof(char) * (size + 1));
+	if (!dup)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s[i])
+		dup[i++] = s[j++];
+	dup[i] = '\0';
+	return (dup);
 }
 
-char    *ft_strdup(char *s)
+char	*ft_substr(char *str, unsigned int start, size_t len)
 {
-    size_t  i;
-    size_t  j;
-    size_t  size;
-    char    *dup;
+	size_t	i;
+	char	*substr;
 
-    if (!s)
-        return(NULL);
-
-    size = ft_strlen(s);
-
-    dup = (char *)malloc(sizeof(char) * (size + 1));
-    if (!dup)
-        return(NULL);
-    i = 0;
-    j = 0;
-    while (s[i])
-        dup[i++] = s[j++];
-    dup[i] = '\0';
-    return (dup);
+	i = 0;
+	if (!str)
+		return (NULL);
+	substr = (char *)malloc(sizeof(char) * (len + 1));
+	if (!substr)
+		return (NULL);
+	while (str[start] && start < len)
+		substr[i++] = str[start++];
+	substr[i] = '\0';
+	return (substr);
 }
 
-char    *ft_substr(char *str, unsigned int start, size_t len)
+char	*ft_strjoin(char *base, char *append)
 {
-    size_t  i;
-    char    *substr;
+	size_t	i;
+	size_t	j;
+	char	*joint;
 
-    i = 0;
-    if(!str)
-        return(NULL);
-    substr = (char *)malloc(sizeof(char) * (len + 1));
-    if (!substr)
-        return(NULL);
-    while (str[start] && start < len)
-        substr[i++] = str[start++];
-    substr[i] = '\0';
-    return(substr);
-}
-
-char    *ft_strjoin(char *base, char *append)
-{
-    size_t  i;
-    size_t  j;
-    char    *joint;
-    
-    if(!base || !append)
-        return(!base ? ft_strdup(append) : ft_strdup(base));
-    joint = malloc(sizeof(char) * (ft_strlen(base) + ft_strlen(append) + 1));
-    if (!joint)
-        return(NULL);
-    i = -1;
-    j = -1;
-    while (base[++i])
-        joint[i] = base[i];
-    while (append[++j])
-        joint[i + j] = append[j];
-    joint[i + j] = '\0';
-    return(joint);
+	if (!base)
+		return (ft_strdup(append));
+	if (!append)
+		return (ft_strdup(base));
+	joint = malloc(sizeof(char) * (ft_strlen(base) + ft_strlen(append) + 1));
+	if (!joint)
+		return (NULL);
+	i = -1;
+	j = -1;
+	while (base[++i])
+		joint[i] = base[i];
+	while (append[++j])
+		joint[i + j] = append[j];
+	joint[i + j] = '\0';
+	return (joint);
 }

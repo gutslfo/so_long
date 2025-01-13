@@ -1,94 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   checkmap.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pitran <pitran@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 17:24:42 by pitran            #+#    #+#             */
-/*   Updated: 2024/12/29 23:49:10 by pitran           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "solong.h"
-
-int	line_count(char	*filename)
-{
-	int	fd;
-	int	line_count;
-	int	empty_line;
-	char *line;
-
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		return(perror("Error openeing file (fd negative)"), 0);
-
-	line_count = 0;
-	empty_line = 0;
-	while((line = get_next_line(fd)))
-	{
-		if (ft_strlen(line) > 1 || line[0] != '\n')
-			line_count++;
-		else 
-			empty_line = 1;
-		free(line);
-	}
-	close (fd);
-	if (empty_line)
-		return(perror("Empty line in map:"), 0);
-	return(line_count);
-}
-
-t_map*	parse_map(char	*filename)
-{
-	t_map	*map;
-	int		fd;
-	char	*line;
-	int		i;
-
-	map = malloc(sizeof(t_map));
-	if (!map)
-		return(perror("Map allocation error"), NULL);
-	
-	map->height = line_count(filename);
-	if (map->height < 3)
-	{
-		free(map);
-		return(printf("Map must have minimum 4 lines"), NULL);
-	}
-	map->grid = malloc(sizeof(char *) * (map->height + 1));
-	if (!map->grid)
-	{
-		free_map(map);
-		return(NULL);
-	}
-	map->collectibles = 0;
-
-	fd = open(filename, O_RDONLY);
-	if(fd < 0)
-	{
-		free_map(map);
-		return(NULL);
-	}
-	
-	i = 0;
-	while((line = get_next_line(fd)))
-	{
-		map->grid[i] = line;
-		if (i == 0)
-			map->width = ft_strlen(line);
-		if (ft_strlen(line) != map->width || map->width < 3)
-		{
-			free_map(map);
-			return(NULL);
-		}
-		i++;
-	}
-	
-	map->grid[i] = NULL;
-	close(fd);
-	return(map);
-}
 
 int	check_structure(t_map *map)
 {
@@ -98,21 +8,24 @@ int	check_structure(t_map *map)
 	i = 0;
 	while (i < map->height)
 	{
-		if (ft_strlen(map->grid[i]) != map->width)
-			return(0);
-		
 		if (i == 0 || i == map->height - 1)
 		{
 			j = 0;
-			while (j < map->width)
+			while (j < map->width - 1)
 			{
 				if (map->grid[i][j] != '1')
+				{
+					printf("Map must be surrounded by walls");
 					return(0);
+				}
 				j++;
 			}
 		}
-		else if(map->grid[i][0]!= '1' || map->grid[i][map->width - 1] != '1')
+		else if(map->grid[i][0]!= '1' || map->grid[i][map->width - 1] == '1')
+		{
+			printf("Map must be surrounded by walls\n");
 			return(0);
+		}
 		i++;	
 	}
 	return(1);
@@ -125,7 +38,6 @@ int	validate_elements(t_map *map)
 	int	player_count;
 	int	exit_count;
 	
-	map->collectibles = 0;
 	player_count = 0;
 	exit_count = 0;
 	i = 0;
@@ -135,16 +47,21 @@ int	validate_elements(t_map *map)
 		while (j < map->width)
 		{
 			if (!ft_strchr("01CEP", map->grid[i][j]))
+			{
+				printf("Invalid element");
 				return(0);
+			}
 			if (map->grid[i][j] == 'P')
 			{
 				player_count++;
+				printf("Player count: %d\n", player_count);
 				map->player_x = j;
 				map->player_y = i;
 			}
 			else if (map->grid[i][j] == 'E')
 			{
 				exit_count++;
+				printf("Exit count: %d\n", exit_count);
 				map->exit_x = j;
 				map->exit_y = i;
 			}
@@ -154,8 +71,21 @@ int	validate_elements(t_map *map)
 		}
 		i++;
 	}
-	if (player_count != 1 || exit_count != 1 || map->collectibles <= 0)
-		return 0;
+	if (player_count != 1)
+	{
+		printf("You must have one player position (P)\n");
+		return (0);
+	}
+	if (exit_count != 1)
+	{
+		printf("You must have one exit position (E)\n");
+		return (0);
+	}
+	if (map->collectibles <= 0)
+	{
+		printf("You must have at least one collectible on the map\n");
+		return (0);
+	}
 	return (1);
 }
 
@@ -187,8 +117,10 @@ int	floodtest(t_map *map)
 
 	map_copy = malloc(sizeof(char *) * (map->height + 1));
 	if (!map_copy)
+	{
+		printf("Floodtest: map grid copy allocation error");
 		return(0);
-
+	}
 	i = 0;
 	while (i < map->height)
 	{
@@ -196,6 +128,7 @@ int	floodtest(t_map *map)
 		if (!map_copy[i])
 		{
 			free_map(map_copy, i);
+			printf("Floodtest: string allocation error (ft_strdup)");
 			return (0);
 		}
 		i++;
@@ -212,9 +145,8 @@ int	floodtest(t_map *map)
 		return(1);
 	}
 	free_map(map_copy, map->height);
+	printf("Invalid access path\n");
 	return(0);
-
-	
 }
 
 void	free_map(char **map, int height)

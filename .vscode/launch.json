@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug C Program with GDB",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/a.out",  // Correct path to the program
+            "args": [],  // Arguments to pass to the program (leave empty if not needed)
+            "stopAtEntry": false,  // Set to true if you want to stop at the entry point (main)
+            "cwd": "${workspaceFolder}",  // Correct working directory
+            "environment": [],  // Optional: specify environment variables
+            "externalConsole": false,  // Set to true to use an external terminal
+            "MIMode": "gdb",  // Specifies the debugger (GDB for C/C++)
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb",  // Path to GDB (adjust based on your system)
+            "preLaunchTask": "C/C++: gcc build active file",  // Task to run before launching the debugger
+            "miDebuggerArgs": "",
+            "logging": {
+                "moduleLoad": false,
+                "trace": false,
+                "engineLogging": false
+            },
+            "debugServerPath": "",
+            "debugServerArgs": "",
+            "serverStarted": "",
+            "filterStderr": false,
+            "filterStdout": false
+        }
+    ]
+}
